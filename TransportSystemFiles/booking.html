@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travelify Booking</title>
+    <link rel="stylesheet" href="booking.css">
+</head>
+<body>
+
+    <!-- Booking Section -->
+    <section class="booking-portal">
+        <h2>Hello, Traveler</h2>
+        <form>
+            <label for="start-location">Select the Starting Location</label>
+<select id="start-location">
+    <option value="" disabled selected>Select your starting point</option>
+    <option value="newyork">New York</option>
+    <option value="losangeles">Los Angeles</option>
+    <!-- Add more options as needed -->
+</select>
+
+<label for="destination">Select the Destination</label>
+<select id="destination">
+    <option value="" disabled selected>Select your destination</option>
+    <option value="paris">Paris</option>
+    <option value="tokyo">Tokyo</option>
+    <!-- Add more options as needed -->
+</select>
+
+<label for="transport">Available Modes of Transport</label>
+<select id="transport">
+    <option value="" disabled selected>Select transport mode</option>
+    <option value="airplane">Airplane</option>
+    <option value="train">Train</option>
+    <option value="bus">Bus</option>
+    <!-- Add more options as needed -->
+</select>
+
+
+            <button type="submit">Book Now</button>
+        </form>
+    </section>
+
+</body>
+</html>

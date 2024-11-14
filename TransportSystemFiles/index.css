@@ -1,0 +1,233 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Hero Section with Header Overlay */
+.hero {
+    background-image: url('https://s3-alpha-sig.figma.com/img/e8d3/09fc/44aacaad143a921fd20b2df40cef9518?Expires=1732492800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=DPd5h4xY0yfjw6zSdn5hTdMI6ENfY0v3MAyR7CHkV9Oz3MY3XxOK3ibc-o33yJ2sDXdmbjyQfI9jOZ3w2izh0FouWp1xo--LPWJZVjOcAnmiSADdiQWO7r6fg71M8Oe0lUFbDo3mQpmi9JwvjB6xNKAuCspjTz1FqhEAhAPjCjwARNrjjYsfmlBhUI6yMef8Tz7v1SHJXKmJDlS0UyrIPV35eDYIdHyc1~exqRFnu1Y~wAwzj24ZXNhdGp~Lqzlq46dZLLicIHisApfBlWG~bkEd9tCk2Yd4FPm9o~NjVGXcPkE7Yh0JI1KvYEbCN6oJ58ru0Zkc4oOQWvD4XqwFNQ__');
+    color: white;
+    text-align: center;
+    padding: 60px 20px;
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+/* Header within Hero Section */
+.hero header {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 90%;
+    max-width: 1200px;
+}
+
+header h1 {
+    font-size: 3.5rem;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+header nav {
+    display: flex;
+    gap: 20px;
+}
+
+header nav a {
+    text-decoration: none;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: color 0.3s;
+}
+
+header nav a:hover {
+    color: #dddddd;
+}
+
+/* Hero Section Text */
+.hero p {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin: 20px 0;
+    color: #ffffff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+#aeroplane{
+    transform: scale(1.5);
+    position: relative;
+    bottom: 100px;
+}
+
+h2 {
+    font-size: 2em;
+    
+    margin: 20px 0;
+    color: #ffffff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+
+nav {
+    display: flex;
+    gap: 20px;
+}
+
+nav a {
+    text-decoration: none;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: #dddddd;
+}
+
+/* Buttons in Hero Section */
+.buttons {
+    margin-top: 20px;
+    align-items: center;
+    display: flex;
+    gap: 15px;
+}
+
+.sign-in, .sign-up {
+    padding: 12px 30px;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.sign-in {
+    background-color: #B0D6DF;
+    color: #333333;
+}
+
+.sign-in:hover {
+    background-color: #093139;
+    color:aliceblue;
+}
+
+.sign-up {
+    background-color: #ffffff;;
+    color: #333333;
+}
+
+.sign-up:hover {
+    background-color: #444444;
+    color:aliceblue;
+}
+
+#seeRoutes {
+    padding: 10px 20px;
+    border-radius: 40px;
+    font-size: 0.7em;
+    background: #4E4E4E;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 0px;
+}
+
+
+/* Air Routes and Road Routes Sections */
+.air-routes, .road-routes {
+    padding: 50px 20px;
+    background: #000000;
+    text-align: center;
+    color: hsla(0, 0%, 34%, 0.582);
+    min-height: 100vh;
+}
+
+.air-routes h2, .road-routes h2 {
+    font-size: 5em;
+    margin-bottom: 20px;
+}
+
+/* Content layout for Air Routes */
+.air-routes .content {
+    display: flex;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.air-routes .content-header {
+    flex: 1;
+    text-align: center;
+    font-size: 2em;
+    padding: 2px;
+}
+.air-routes .content-text {
+    flex: 1;
+    text-align: left;
+    color: hsl(0, 0%, 100%);
+    font-size: 2em;
+    padding: 20px;
+}
+
+.air-routes .route-image {
+    flex: 1;
+    max-width: 1000px;
+    margin-left: 2px;
+    padding: 10px;
+    border-radius: 10px;
+}
+/* Content layout for Road Routes */
+.road-routes .content {
+    display: flex;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.road-routes .content-header {
+    flex: 1;
+    text-align: center; 
+    font-size: 2em;
+    padding: 2px;
+}
+.road-routes .content-text {
+    flex: 1;
+    text-align: right;
+    color: hsl(0, 0%, 100%);
+    font-size: 2em;
+    padding: 20px;
+}
+.road-routes .route-image {
+    flex: 1;
+    max-width: 1000px;
+    margin-left: 2px;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+/* Styles for Paragraph and Button */
+.air-routes p, .road-routes p {
+    margin: 20px 0;
+}
+
+
+
+
