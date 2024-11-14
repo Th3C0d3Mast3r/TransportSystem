@@ -91,6 +91,14 @@ CREATE TABLE IF NOT EXISTS userDatabase (
     userPassword VARCHAR(18)
 );
 
+ALTER TABLE userDatabase
+ADD createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+INSERT INTO userDatabase
+(userName, userPhoneNumber, userAadhar, userPassword)
+VALUES
+("User1", "1234567890", "1155997788", "passwordss");
+SELECT * FROM userDatabase;
+
 -- Create the bookingLog table
 CREATE TABLE IF NOT EXISTS bookingLog (
     srNo INT,

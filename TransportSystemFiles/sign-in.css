@@ -28,11 +28,13 @@ label {
     display: block;
     margin-bottom: 5px;
     font-size: 0.9rem;
-}
-
-label{
     position: relative;
     right: 150px;
+}
+
+#user{
+    position: relative;
+    right: 170px    
 }
 
 input {
