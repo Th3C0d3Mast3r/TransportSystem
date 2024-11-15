@@ -112,6 +112,14 @@ CREATE TABLE IF NOT EXISTS bookingLog (
     FOREIGN KEY (userAadhar) REFERENCES userDatabase(userAadhar)
 );
 
+-- for the case of admin of employee
+INSERT INTO companyEmployee
+(empID, empName, empPhoneNo)
+VALUES
+("AD001", "Devesh", "0000000001"),
+("AD002", "Atharv", "0000000002"),
+("AD003", "Yug", "0000000003");
+
 INSERT INTO companyEmployee
 (empId, empName, empPhoneNo)
 VALUES
