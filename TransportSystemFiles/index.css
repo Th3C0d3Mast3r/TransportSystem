@@ -1,3 +1,13 @@
+
+these are some of the changes that I have done in the HTML and the CSS file
+
+
+ 2 Attachments
+  •  Scanned by Gmail
+	
+Pause mobile notifications while you're using this device
+To pause Chat mobile notifications while you’re active on this device, allow your browser to detect if you’re active or away. Click Continue and then Allow when prompted by your browser.
+
 /* General Reset */
 * {
     margin: 0;
@@ -6,7 +16,6 @@
     font-family: Arial, sans-serif;
 }
 
-/* Hero Section with Header Overlay */
 .hero {
     background-image: url('https://s3-alpha-sig.figma.com/img/e8d3/09fc/44aacaad143a921fd20b2df40cef9518?Expires=1732492800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=DPd5h4xY0yfjw6zSdn5hTdMI6ENfY0v3MAyR7CHkV9Oz3MY3XxOK3ibc-o33yJ2sDXdmbjyQfI9jOZ3w2izh0FouWp1xo--LPWJZVjOcAnmiSADdiQWO7r6fg71M8Oe0lUFbDo3mQpmi9JwvjB6xNKAuCspjTz1FqhEAhAPjCjwARNrjjYsfmlBhUI6yMef8Tz7v1SHJXKmJDlS0UyrIPV35eDYIdHyc1~exqRFnu1Y~wAwzj24ZXNhdGp~Lqzlq46dZLLicIHisApfBlWG~bkEd9tCk2Yd4FPm9o~NjVGXcPkE7Yh0JI1KvYEbCN6oJ58ru0Zkc4oOQWvD4XqwFNQ__');
     color: white;
@@ -35,10 +44,12 @@
     max-width: 1200px;
 }
 
+/* Updated styling for the website name */
 header h1 {
     font-size: 3.5rem;
     font-weight: bold;
     color: #ffffff;
+    font-family: 'Chango', 'Newsreader', Arial, sans-serif; /* Add the Google Fonts here */
 }
 
 header nav {
@@ -82,10 +93,20 @@ h2 {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
+#subtitle{
+    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-style: italic;
+    color:#dadada;
+    font-size: 25px;
+}
 
 nav {
     display: flex;
     gap: 20px;
+}
+
+.sentences{
+    font-family:Arial, Helvetica, sans-serif
 }
 
 nav a {
@@ -122,21 +143,25 @@ nav a:hover {
 .sign-in {
     background-color: #B0D6DF;
     color: #333333;
+    transition: all 0.3s ease;
 }
 
 .sign-in:hover {
     background-color: #093139;
     color:aliceblue;
+    transform: scale(1.2);
 }
 
 .sign-up {
     background-color: #ffffff;;
     color: #333333;
+    transition: all 0.3s ease;
 }
 
 .sign-up:hover {
     background-color: #444444;
     color:aliceblue;
+    transform: scale(1.2);
 }
 
 #seeRoutes {
@@ -148,6 +173,13 @@ nav a:hover {
     border: none;
     cursor: pointer;
     margin-top: 0px;
+    transition: all 0.3s ease;
+}
+
+#seeRoutes:hover{
+    background-color: #dadada;
+    color:rgb(29, 29, 29);
+    transform: scale(1.2);
 }
 
 
@@ -163,6 +195,7 @@ nav a:hover {
 .air-routes h2, .road-routes h2 {
     font-size: 5em;
     margin-bottom: 20px;
+    font-family: 'Chango', 'Newsreader', Arial, sans-serif; 
 }
 
 /* Content layout for Air Routes */
@@ -227,7 +260,3 @@ nav a:hover {
 .air-routes p, .road-routes p {
     margin: 20px 0;
 }
-
-
-
-
