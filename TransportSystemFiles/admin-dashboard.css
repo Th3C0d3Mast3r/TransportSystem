@@ -1,4 +1,11 @@
 /* Styling for the Admin Dashboard */
+
+.jomhuria-regular {
+    font-family: "Jomhuria", serif;
+    font-weight: 400;
+    font-style: normal;
+  }
+
 body {
     background-color: #222;
     color: #fff;
@@ -19,12 +26,18 @@ body {
 h1 {
     font-size: 4rem;
     margin-bottom: 20px;
+    font-family: "Jomhuria", serif;
+    font-weight: lighter;
+    font-size: 08em;
 }
 
 p {
-    font-size: 1rem;
-    line-height: 1.5;
-    margin-bottom: 30px;
+    margin-top: 10px;
+    font-family: "Jomhuria", serif;
+    font-weight: lighter;
+    font-size: 2.5em;
+    line-height: 0.7;
+    word-spacing: 5px;
 }
 
 .button-group {
