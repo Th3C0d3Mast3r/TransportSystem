@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transport Booking</title>
+  <link rel="stylesheet" href="bookingLog.css">
+</head>
+<body>
+  <h1>Welcome to Transport Booking</h1>
+  <div>
+    <h3>Select Mode of Transport</h3>
+    <select id="modeSelect" onchange="fetchRoutes()">
+      <option value="BUS">BUS</option>
+      <option value="CAB">CAB</option>
+      <option value="TRAIN">TRAIN</option>
+      <option value="PLANE">PLANE</option>
+    </select>
+  </div>
+
+  <div id="routesContainer"></div>
+
+  <div id="bookingForm" style="display: none;">
+    <h3>Book Your Trip</h3>
+    <form onsubmit="bookTrip(event)">
+      <input type="text" id="userAadhar" placeholder="Enter Aadhar" required>
+      <input type="number" id="ticketsBooked" placeholder="Number of Tickets" required>
+      <button type="submit">Book Now</button>
+    </form>
+  </div>
+
+  <script src="bookingLog.js"></script>
+</body>
+</html>
