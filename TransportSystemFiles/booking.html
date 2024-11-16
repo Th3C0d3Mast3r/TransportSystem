@@ -3,44 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Travelify Booking</title>
+    <title>Travel Booking</title>
     <link rel="stylesheet" href="booking.css">
 </head>
 <body>
-
-    <!-- Booking Section -->
-    <section class="booking-portal">
-        <h2>Hello, Traveler</h2>
-        <form>
+    <section class="booking-form">
+        <h1>Hello, Bro</h1>
+        <form id="travel-form">
             <label for="start-location">Select the Starting Location</label>
-<select id="start-location">
-    <option value="" disabled selected>Select your starting point</option>
-    <option value="newyork">New York</option>
-    <option value="losangeles">Los Angeles</option>
-    <!-- Add more options as needed -->
-</select>
+            <select id="start-location" required>
+                <option value="" disabled selected>Value</option>
+                <option value="MUMBAI">MUMBAI</option>
+                <option value="DELHI">DELHI</option>
+                <option value="MADURAI">MADURAI</option>
+                <option value="PUNE">PUNE</option>
+                <option value="BANGALORE">BANGALORE</option>
+                <option value="HYDREBAD">HYDREBAD</option>
+                <option value="CHENNAI">CHENNAI</option>
+                <option value="KOLKATA">KOLKATA</option>
+                <option value="JAIPUR">JAIPUR</option>
+            </select>
 
-<label for="destination">Select the Destination</label>
-<select id="destination">
-    <option value="" disabled selected>Select your destination</option>
-    <option value="paris">Paris</option>
-    <option value="tokyo">Tokyo</option>
-    <!-- Add more options as needed -->
-</select>
+            <label for="destination">Select the Destination</label>
+            <select id="destination" required>
+                <option value="" disabled selected>Value</option>
+                <option value="PUNE">PUNE</option>
+                <option value="JAIPUR">JAIPUR</option>
+                <option value="COIMBATORE">COIMBATORE</option>
+                <option value="DELHI">DELHI</option>
+                <option value="NAGPUR">NAGPUR</option>
+                <option value="INDORE">INDORE</option>
+                <option value="CHENNAI">CHENNAI</option>
+                <option value="VIJAYWADA">VIJAYWADA</option>
+                <option value="GOA">GOA</option>
+                <option value="BANGALORE">BANGALORE</option>
+                <option value="RANCHI">RANCHI</option>
+                <option value="PATNA">PATNA</option>
+                <option value="VARANASI">VARANASI</option>
+                <option value="AMRITSAR">AMRITSAR</option>
+                <option value="JAMMU">JAMMU</option>
+                <option value="SILCHAR">SILCHAR</option>
+            </select>
 
-<label for="transport">Available Modes of Transport</label>
-<select id="transport">
-    <option value="" disabled selected>Select transport mode</option>
-    <option value="airplane">Airplane</option>
-    <option value="train">Train</option>
-    <option value="bus">Bus</option>
-    <!-- Add more options as needed -->
-</select>
+            <label for="transport">Available Modes of Transport</label>
+            <select id="transport" required>
+                <option value="" disabled selected>Value</option>
+                <option value="airplane">Airplane</option>
+                <option value="train">Train</option>
+                <option value="bus">Bus</option>
+            </select>
 
-
-            <button type="submit">Book Now</button>
+            <button type="button" id="search-button" onclick="window.location.href='booking-portal.html'">SEARCH</button>
         </form>
     </section>
 
+    <script src="script.js"></script>
 </body>
 </html>
