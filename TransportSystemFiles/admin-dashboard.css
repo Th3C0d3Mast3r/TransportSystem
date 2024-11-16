@@ -19,7 +19,7 @@ body {
 
 .admin-container {
     width: 100%;
-    max-width: 400px;
+    max-width: 900px;
     text-align: center;
 }
 
@@ -42,12 +42,13 @@ p {
 
 .button-group {
     display: flex;
-    justify-content: space-between;
-    gap: 12px;
+    justify-content:center;
+    gap: 75px;
 }
 
 .admin-btn {
-    width: 100%;
+    width: 30%;
+    transform: scale(1.2);
     padding: 12px;
     background-color: #fff;
     color: #333;
