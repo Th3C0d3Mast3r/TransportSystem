@@ -1,14 +1,12 @@
 
-these are some of the changes that I have done in the HTML and the CSS file
-
-
- 2 Attachments
-  •  Scanned by Gmail
-	
-Pause mobile notifications while you're using this device
-To pause Chat mobile notifications while you’re active on this device, allow your browser to detect if you’re active or away. Click Continue and then Allow when prompted by your browser.
-
 /* General Reset */
+
+.jomhuria-regular {
+    font-family: "Jomhuria", serif;
+    font-weight: 400;
+    font-style: normal;
+  }
+
 * {
     margin: 0;
     padding: 0;
@@ -16,8 +14,14 @@ To pause Chat mobile notifications while you’re active on this device, allow y
     font-family: Arial, sans-serif;
 }
 
+img{
+    z-index: 1;
+}
+
 .hero {
+    background-color: #959595;
     background-image: url('https://s3-alpha-sig.figma.com/img/e8d3/09fc/44aacaad143a921fd20b2df40cef9518?Expires=1732492800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=DPd5h4xY0yfjw6zSdn5hTdMI6ENfY0v3MAyR7CHkV9Oz3MY3XxOK3ibc-o33yJ2sDXdmbjyQfI9jOZ3w2izh0FouWp1xo--LPWJZVjOcAnmiSADdiQWO7r6fg71M8Oe0lUFbDo3mQpmi9JwvjB6xNKAuCspjTz1FqhEAhAPjCjwARNrjjYsfmlBhUI6yMef8Tz7v1SHJXKmJDlS0UyrIPV35eDYIdHyc1~exqRFnu1Y~wAwzj24ZXNhdGp~Lqzlq46dZLLicIHisApfBlWG~bkEd9tCk2Yd4FPm9o~NjVGXcPkE7Yh0JI1KvYEbCN6oJ58ru0Zkc4oOQWvD4XqwFNQ__');
+    background-blend-mode: multiply;
     color: white;
     text-align: center;
     padding: 60px 20px;
@@ -46,10 +50,9 @@ To pause Chat mobile notifications while you’re active on this device, allow y
 
 /* Updated styling for the website name */
 header h1 {
-    font-size: 3.5rem;
-    font-weight: bold;
+    font-size: 10rem;
     color: #ffffff;
-    font-family: 'Chango', 'Newsreader', Arial, sans-serif; /* Add the Google Fonts here */
+    font-family: "Jomhuria", serif;
 }
 
 header nav {
@@ -57,12 +60,14 @@ header nav {
     gap: 20px;
 }
 
+
 header nav a {
     text-decoration: none;
     color: white;
     font-size: 1.2rem;
-    font-weight: bold;
     text-transform: uppercase;
+    font-family: "Jomhuria", serif;
+    font-size: 4em;
     transition: color 0.3s;
 }
 
@@ -72,9 +77,11 @@ header nav a:hover {
 
 /* Hero Section Text */
 .hero p {
-    font-size: 2.5rem;
-    font-weight: bold;
     margin: 20px 0;
+    line-height: 0.5;
+    font-family: "Jomhuria", serif;
+    font-size: 7em;
+    text-align: center;
     color: #ffffff;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
@@ -94,7 +101,7 @@ h2 {
 }
 
 #subtitle{
-    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-style: italic;
     color:#dadada;
     font-size: 25px;
@@ -106,7 +113,17 @@ nav {
 }
 
 .sentences{
-    font-family:Arial, Helvetica, sans-serif
+    font-family: "Jomhuria", serif;
+    font-size: 2em;
+    text-align: left;
+    line-height: 0.8;
+}
+
+.sentences1{
+    font-family: "Jomhuria", serif;
+    font-size: 2em;
+    text-align: right;
+    line-height: 0.8;
 }
 
 nav a {
@@ -124,7 +141,7 @@ nav a:hover {
 
 /* Buttons in Hero Section */
 .buttons {
-    margin-top: 20px;
+    margin-top: 1px;
     align-items: center;
     display: flex;
     gap: 15px;
@@ -144,6 +161,15 @@ nav a:hover {
     background-color: #B0D6DF;
     color: #333333;
     transition: all 0.3s ease;
+}
+
+#headingPhrase{
+    font-family: "Jomhuria", serif;
+    position: relative;
+    top: 90px;
+    padding: 0;
+    margin: 0;
+    font-size: 3em
 }
 
 .sign-in:hover {
@@ -193,9 +219,9 @@ nav a:hover {
 }
 
 .air-routes h2, .road-routes h2 {
-    font-size: 5em;
+    font-size: 15em;
     margin-bottom: 20px;
-    font-family: 'Chango', 'Newsreader', Arial, sans-serif; 
+    font-family: "Jomhuria", serif;
 }
 
 /* Content layout for Air Routes */
@@ -250,10 +276,13 @@ nav a:hover {
 }
 .road-routes .route-image {
     flex: 1;
+    z-index: 2;
     max-width: 1000px;
     margin-left: 2px;
     padding: 10px;
     border-radius: 10px;
+    height: auto;
+    width: 4em;
 }
 
 /* Styles for Paragraph and Button */
