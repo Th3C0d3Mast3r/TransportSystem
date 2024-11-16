@@ -53,6 +53,7 @@ header h1 {
     font-size: 10rem;
     color: #ffffff;
     font-family: "Jomhuria", serif;
+    font-weight: lighter;
 }
 
 header nav {
@@ -67,6 +68,7 @@ header nav a {
     font-size: 1.2rem;
     text-transform: uppercase;
     font-family: "Jomhuria", serif;
+    font-weight: lighter;
     font-size: 4em;
     transition: color 0.3s;
 }
@@ -101,10 +103,10 @@ h2 {
 }
 
 #subtitle{
-    font-family: Arial, Helvetica, sans-serif;
-    font-style: italic;
+    font-family: "Jomhuria", serif;
     color:#dadada;
-    font-size: 25px;
+    font-weight: lighter;
+    font-size: 3.5em;
 }
 
 nav {
@@ -193,7 +195,8 @@ nav a:hover {
 #seeRoutes {
     padding: 10px 20px;
     border-radius: 40px;
-    font-size: 0.7em;
+    font-family: "Jomhuria", serif;
+    font-size: 1.5em;
     background: #4E4E4E;
     color: white;
     border: none;
@@ -222,6 +225,7 @@ nav a:hover {
     font-size: 15em;
     margin-bottom: 20px;
     font-family: "Jomhuria", serif;
+    font-weight:400
 }
 
 /* Content layout for Air Routes */
