@@ -6,18 +6,19 @@
     <title>Sign In</title>
     <link rel="stylesheet" href="sign-in.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <script defer src="sign-in.js"></script> <!-- Link your JS file -->
 </head>
 <body>
     <div class="sign-in-container">
         <h1>SIGN IN</h1>
-        <form action="signIn.php" method="post">
+        <form id="signInForm" action="signIn.php" method="post">
             <div class="input-group">
                 <label id="user"><i class="fas fa-user"></i> USER</label>
-                <input type="text" placeholder="Aadhar Number">
+                <input type="text" id="aadharInput" placeholder="Aadhar Number" required>
             </div>
             <div class="input-group">
                 <label><i class="fas fa-lock"></i> PASSWORD</label>
-                <input type="password" placeholder="Password">
+                <input type="password" id="passwordInput" placeholder="Password" required>
             </div>
             <button type="submit" class="sign-in-btn">SIGN IN</button>
         </form>
