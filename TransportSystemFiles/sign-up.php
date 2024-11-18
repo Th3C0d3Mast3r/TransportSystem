@@ -1,7 +1,7 @@
 <?php
 // Database connection parameters
 $host = 'localhost';
-$dbname = 'TransportDB';
+$dbname = 'transportdb';
 $username = 'root'; // Replace with your database username
 $password = ''; // Replace with your database password
 
@@ -9,11 +9,16 @@ $password = ''; // Replace with your database password
 $error = "";
 $success = "";
 
+// Enable error reporting for debugging during development
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $userName = $_POST['userName'];
-    $userPhoneNumber = $_POST['userPhoneNumber'];
-    $userAadhar = $_POST['userAadhar'];
-    $userPassword = $_POST['userPassword'];
+    $userName = $_POST['userName'] ?? '';
+    $userPhoneNumber = $_POST['userPhoneNumber'] ?? '';
+    $userAadhar = $_POST['userAadhar'] ?? '';
+    $userPassword = $_POST['userPassword'] ?? '';
 
     // Validate inputs
     if (empty($userName) || empty($userPhoneNumber) || empty($userAadhar) || empty($userPassword)) {
@@ -34,8 +39,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt->bindParam(':userAadhar', $userAadhar);
             $stmt->bindParam(':userPassword', $userPassword);
 
-            $stmt->execute();
-            $success = "Signup successful! You can now log in.";
+            if ($stmt->execute()) {
+                $success = "Signup successful! You can now log in.";
+            } else {
+                $error = "Failed to insert data.";
+            }
         } catch (PDOException $e) {
             if ($e->getCode() == 23000) {
                 $error = "Aadhar number already registered.";
