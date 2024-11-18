@@ -6,5 +6,5 @@ document.getElementById("bookingLogs").addEventListener("click", function () {
 
 document.getElementById("userDatabase").addEventListener("click", function () {
     // Redirect to User Database page
-    window.location.href = "user-database.html"; // Replace with actual URL
+    window.location.href = "user-database.php"; // Replace with actual URL
 });
