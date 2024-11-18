@@ -69,19 +69,6 @@ CREATE TABLE IF NOT EXISTS planeRoute (
     FOREIGN KEY (empId) REFERENCES companyEmployee(empId)
 );
 
--- -- Create the yachtRoute table
--- CREATE TABLE IF NOT EXISTS yachtRoute (
---     modeType VARCHAR(20) DEFAULT 'YACHT',
---     yachtNo VARCHAR(20) PRIMARY KEY,
---     totalCapacity INT,
---     route VARCHAR(50),
---     travelMode ENUM('ECONOMY', 'FIRST CLASS', 'PRIVATE') NOT NULL,
---     fareEconomy FLOAT, -- Fare for ECONOMY class
---     fareFirstClass FLOAT, -- Fare for FIRST CLASS
---     farePrivate FLOAT, -- Fare for PRIVATE class
---     empId VARCHAR(10),
---     FOREIGN KEY (empId) REFERENCES companyEmployee(empId)
--- );
 
 -- Create the userDatabase table
 CREATE TABLE IF NOT EXISTS userDatabase (
@@ -93,6 +80,7 @@ CREATE TABLE IF NOT EXISTS userDatabase (
 
 ALTER TABLE userDatabase
 ADD createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+
 INSERT INTO userDatabase
 (userName, userPhoneNumber, userAadhar, userPassword)
 VALUES
