@@ -1,62 +1,63 @@
 <?php
-// Enable error reporting for debugging
+// Start session if not already active
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Enable error display for debugging
 ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Database connection parameters
-$host = 'localhost';
-$dbname = 'TransportDB';
-$username = 'root'; // Replace with your database username
-$password = ''; // Replace with your database password (empty if no password set)
+// Database connection
+$servername = "localhost";
+$username = "root";
+$password = ""; // Adjust if your MySQL root user has a password
+$dbname = "TransportDB";
 
-// Initialize variables
-$error = "";
-$success = "";
+try {
+    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Database connection failed: " . $e->getMessage());
+}
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $userAadhar = $_POST['userAadhar'];
-    $userPassword = $_POST['userPassword'];
+// Handle POST request
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $aadhar = trim($_POST['aadhar']);
+    $password = trim($_POST['password']);
 
-    // Validate inputs
-    if (empty($userAadhar) || empty($userPassword)) {
-        $error = "Aadhar number and password are required.";
-    } else {
-        try {
-            // Establish connection
-            $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    if (empty($aadhar) || empty($password)) {
+        echo "<script>
+                alert('Please fill in all fields.');
+                window.location.href = 'sign-in.html';
+              </script>";
+        exit();
+    }
 
-            // Check if Aadhar belongs to an employee (special cases)
-            $employeeCredentials = [
-                'AD001' => 'Devesh',
-                'AD002' => 'Atharv',
-                'AD003' => 'Yug'
-            ];
+    try {
+        $stmt = $conn->prepare("SELECT userName FROM userDatabase WHERE userAadhar = :aadhar AND userPassword = :password");
+        $stmt->bindParam(':aadhar', $aadhar, PDO::PARAM_STR);
+        $stmt->bindParam(':password', $password, PDO::PARAM_STR);
+        $stmt->execute();
 
-            if (array_key_exists($userAadhar, $employeeCredentials) && $userPassword === $employeeCredentials[$userAadhar]) {
-                // If Aadhar is for an employee, redirect to the admin dashboard
-                header("Location: admin-dashboard.html");
-                exit();
-            } else {
-                // If Aadhar is not for an employee, check the userDatabase
-                $stmt = $conn->prepare("SELECT * FROM userDatabase WHERE userAadhar = :userAadhar AND userPassword = :userPassword");
-                $stmt->bindParam(':userAadhar', $userAadhar);
-                $stmt->bindParam(':userPassword', $userPassword);
-                $stmt->execute();
-
-                // Check if user exists and credentials match
-                if ($stmt->rowCount() > 0) {
-                    // User is authenticated, redirect to booking page
-                    header("Location: booking.html");
-                    exit();
-                } else {
-                    $error = "Invalid Aadhar number or password.";
-                }
-            }
-        } catch (PDOException $e) {
-            $error = "Error: " . $e->getMessage();
+        if ($stmt->rowCount() > 0) {
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+            $_SESSION['userName'] = $user['userName'];
+            echo "<script>
+                    localStorage.setItem('userName', '{$user['userName']}');
+                    window.location.href = 'booking.html';
+                  </script>";
+        } else {
+            echo "<script>
+                    alert('Invalid Aadhar Number or Password.');
+                    window.location.href = 'sign-in.html';
+                  </script>";
         }
+    } catch (PDOException $e) {
+        error_log("Query error: " . $e->getMessage());
+        echo "<script>
+                alert('An error occurred. Please try again later.');
+              </script>";
     }
 }
 ?>
@@ -74,24 +75,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
     <div class="sign-in-container">
         <h1>SIGN IN</h1>
-
-        <!-- Display error or success messages -->
-        <?php if ($error): ?>
-            <p class="error" style="color: red;"><?= htmlspecialchars($error) ?></p>
-        <?php endif; ?>
-
-        <form method="POST" action="">
+        <form id="signInForm" action="sign-in.php" method="post">
             <div class="input-group">
-                <label id="user"><i class="fas fa-user"></i> AADHAR NUMBER</label>
-                <input type="text" name="userAadhar" placeholder="Aadhar Number" required>
+                <label id="user"><i class="fas fa-user"></i> USER</label>
+                <input type="text" id="aadharInput" name="aadhar" placeholder="Aadhar Number" required>
             </div>
             <div class="input-group">
                 <label><i class="fas fa-lock"></i> PASSWORD</label>
-                <input type="password" name="userPassword" placeholder="Password" required>
+                <input type="password" id="passwordInput" name="password" placeholder="Password" required>
             </div>
-            <button type="submit" class="sign-in-btn">SIGN IN</button>
+            <button type="submit" class="sign-in-btn" onclick="window.location.href='booking.html'">SIGN IN</button>
         </form>
-
         <p><a href="#">Forgot password?</a></p>
         <p>Don't have an account? <a href="sign-up.html">SIGN UP</a></p>
     </div>
