@@ -1,92 +1,92 @@
-<?php
-// Database connection parameters
-$host = 'localhost';
-$dbname = 'transportdb';
-$username = 'root'; // Replace with your database username
-$password = 'qwertyuiop1234'; // Replace with your database password
-
-try {
-    // Establishing connection
-    $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-    // Fetching user data (excluding password)
-    $stmt = $conn->prepare("SELECT userName, userPhoneNumber, userAadhar, createdAt FROM userDatabase");
-    $stmt->execute();
-
-    // Fetch all users
-    $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-} catch (PDOException $e) {
-    echo "Connection failed: " . $e->getMessage();
-    die();
-}
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - View Users</title>
+    <title>Customers</title>
+    <link rel="stylesheet" href="user-database.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f4f4f4;
-        }
+        /* Inline styles for better table presentation */
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
+            margin: 20px 0;
+            font-size: 18px;
             text-align: left;
         }
-        th {
-            background-color: #007BFF;
-            color: white;
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 12px;
         }
-        tr:nth-child(even) {
+        table th {
+            background-color: #f4f4f4;
+        }
+        table tr:nth-child(even) {
             background-color: #f9f9f9;
         }
-        tr:hover {
+        table tr:hover {
             background-color: #f1f1f1;
         }
         h1 {
-            color: #333;
+            text-align: center;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
-    <h1>Registered Users</h1>
+    <h1>Customers</h1>
 
-    <?php if (count($users) > 0): ?>
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Phone Number</th>
-                    <th>Aadhar</th>
-                    <th>Registration Date</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($users as $user): ?>
-                    <tr>
-                        <td><?= htmlspecialchars($user['userName']) ?></td>
-                        <td><?= htmlspecialchars($user['userPhoneNumber']) ?></td>
-                        <td><?= htmlspecialchars($user['userAadhar']) ?></td>
-                        <td><?= htmlspecialchars($user['createdAt']) ?></td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    <?php else: ?>
-        <p>No users found in the database.</p>
-    <?php endif; ?>
+    <?php
+    // Enable error reporting
+    ini_set('display_errors', 1);
+    error_reporting(E_ALL);
+
+    // Database connection details
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $dbname = "TransportDB"; // Correct database name
+
+    // Create connection
+    $conn = new mysqli($servername, $username, $password, $dbname);
+
+    // Check connection
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    // SQL query to fetch user data
+    $sql = "SELECT * FROM userDatabase";
+    $result = $conn->query($sql);
+
+    if ($result && $result->num_rows > 0) {
+        echo "<table>
+            <tr>
+                <th>SR. NO.</th>
+                <th>USER NAME</th>
+                <th>PH. NO.</th>
+                <th>AADHAR NO.</th>
+                <th>CREATION TIME</th>
+            </tr>";
+
+        $srNo = 1; // Initialize serial number
+        while ($row = $result->fetch_assoc()) {
+            echo "<tr>
+                <td>" . $srNo++ . "</td>
+                <td>" . htmlspecialchars($row["userName"]) . "</td>
+                <td>" . htmlspecialchars($row["userPhoneNumber"]) . "</td>
+                <td>" . htmlspecialchars($row["userAadhar"]) . "</td>
+                <td>" . htmlspecialchars($row["createdAt"]) . "</td>
+            </tr>";
+        }
+
+        echo "</table>";
+    } else {
+        echo "<p style='text-align: center;'>No customers found.</p>";
+    }
+
+    // Close the database connection
+    $conn->close();
+    ?>
 </body>
 </html>
