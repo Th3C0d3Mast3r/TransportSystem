@@ -1,63 +1,63 @@
 <?php
-// Start session if not already active
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+// Database connection parameters
+$host = 'localhost';
+$dbname = 'transportdb';
+$username = 'root'; // Replace with your database username
+$password = ''; // Replace with your database password
 
-// Enable error display for debugging
+// Initialize variables
+$error = "";
+$success = "";
+
+// Enable error reporting for debugging during development
 ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Database connection
-$servername = "localhost";
-$username = "root";
-$password = ""; // Adjust if your MySQL root user has a password
-$dbname = "TransportDB";
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $userAadhar = $_POST['userAadhar'] ?? '';
+    $userPassword = $_POST['userPassword'] ?? '';
 
-try {
-    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Database connection failed: " . $e->getMessage());
-}
+    // Validate inputs
+    if (empty($userAadhar) || empty($userPassword)) {
+        $error = "Both Aadhar and Password are required.";
+    } elseif (!preg_match("/^[0-9]{12}$/", $userAadhar)) {
+        $error = "Invalid Aadhar number. It must be a 12-digit number.";
+    } else {
+        try {
+            // Establish connection
+            $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-// Handle POST request
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $aadhar = trim($_POST['aadhar']);
-    $password = trim($_POST['password']);
+            // Fetch user data
+            $stmt = $conn->prepare("SELECT userName, userPassword FROM userDatabase WHERE userAadhar = :userAadhar");
+            $stmt->bindParam(':userAadhar', $userAadhar);
+            $stmt->execute();
 
-    if (empty($aadhar) || empty($password)) {
-        echo "<script>
-                alert('Please fill in all fields.');
-                window.location.href = 'sign-in.html';
-              </script>";
-        exit();
-    }
+            // Check if user exists
+            if ($stmt->rowCount() > 0) {
+                $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    try {
-        $stmt = $conn->prepare("SELECT userName FROM userDatabase WHERE userAadhar = :aadhar AND userPassword = :password");
-        $stmt->bindParam(':aadhar', $aadhar, PDO::PARAM_STR);
-        $stmt->bindParam(':password', $password, PDO::PARAM_STR);
-        $stmt->execute();
-
-        if ($stmt->rowCount() > 0) {
-            $user = $stmt->fetch(PDO::FETCH_ASSOC);
-            $_SESSION['userName'] = $user['userName'];
-            echo "<script>
-                    localStorage.setItem('userName', '{$user['userName']}');
-                    window.location.href = 'booking.html';
-                  </script>";
-        } else {
-            echo "<script>
-                    alert('Invalid Aadhar Number or Password.');
-                    window.location.href = 'sign-in.html';
-                  </script>";
+                // Verify password (adjust if using hashing)
+                if ($user['userPassword'] === $userPassword) { 
+                    // Successful login
+                    session_start();
+                    $_SESSION['userName'] = $user['userName'];
+                    $success = "Sign-in successful! Redirecting to the booking page...";
+                    echo "<script>
+                            localStorage.setItem('userName', " . json_encode($user['userName']) . ");
+                            window.location.href = 'booking.html';
+                          </script>";
+                    exit();
+                } else {
+                    $error = "Incorrect password.";
+                }
+            } else {
+                $error = "Aadhar not found. Please sign up.";
+            }
+        } catch (PDOException $e) {
+            $error = "Error: " . $e->getMessage();
         }
-    } catch (PDOException $e) {
-        error_log("Query error: " . $e->getMessage());
-        echo "<script>
-                alert('An error occurred. Please try again later.');
-              </script>";
     }
 }
 ?>
@@ -70,21 +70,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Sign In</title>
     <link rel="stylesheet" href="sign-in.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-    <script defer src="sign-in.js"></script>
 </head>
 <body>
     <div class="sign-in-container">
         <h1>SIGN IN</h1>
+        <?php if (!empty($error)): ?>
+            <p class="error-message"><?php echo htmlspecialchars($error); ?></p>
+        <?php elseif (!empty($success)): ?>
+            <p class="success-message"><?php echo htmlspecialchars($success); ?></p>
+        <?php endif; ?>
         <form id="signInForm" action="sign-in.php" method="post">
             <div class="input-group">
-                <label id="user"><i class="fas fa-user"></i> USER</label>
-                <input type="text" id="aadharInput" name="aadhar" placeholder="Aadhar Number" required>
+                <label for="userAadhar"><i class="fas fa-id-card"></i> Aadhar</label>
+                <input type="text" id="userAadhar" name="userAadhar" placeholder="Enter your 12-digit Aadhar" required>
             </div>
             <div class="input-group">
-                <label><i class="fas fa-lock"></i> PASSWORD</label>
-                <input type="password" id="passwordInput" name="password" placeholder="Password" required>
+                <label for="userPassword"><i class="fas fa-lock"></i> Password</label>
+                <input type="password" id="userPassword" name="userPassword" placeholder="Enter your password" required>
             </div>
-            <button type="submit" class="sign-in-btn" onclick="window.location.href='booking.html'">SIGN IN</button>
+            <button type="submit" class="sign-in-btn">SIGN IN</button>
         </form>
         <p><a href="#">Forgot password?</a></p>
         <p>Don't have an account? <a href="sign-up.html">SIGN UP</a></p>
