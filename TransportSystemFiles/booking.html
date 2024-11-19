@@ -8,10 +8,10 @@
 </head>
 <body>
     <section class="booking-form">
-        <h1>Hello, Bro</h1>
-        <form id="travel-form">
+        <h1>Hello, <span id="userName"></span></h1>
+        <form id="travel-form" action="booking.php" method="POST">
             <label for="start-location">Select the Starting Location</label>
-            <select id="start-location" required>
+            <select id="start-location" name="startLocation" required>
                 <option value="" disabled selected>Value</option>
                 <option value="MUMBAI">MUMBAI</option>
                 <option value="DELHI">DELHI</option>
@@ -25,7 +25,7 @@
             </select>
 
             <label for="destination">Select the Destination</label>
-            <select id="destination" required>
+            <select id="destination" name="destination" required>
                 <option value="" disabled selected>Value</option>
                 <option value="PUNE">PUNE</option>
                 <option value="JAIPUR">JAIPUR</option>
@@ -46,17 +46,27 @@
             </select>
 
             <label for="transport">Available Modes of Transport</label>
-            <select id="transport" required>
+            <select id="transport" name="transport" required>
                 <option value="" disabled selected>Value</option>
-                <option value="airplane">Airplane</option>
-                <option value="train">Train</option>
-                <option value="bus">Bus</option>
+                <option value="PLANE">Airplane</option>
+                <option value="TRAIN">Train</option>
+                <option value="BUS">Bus</option>
             </select>
 
-            <button type="button" id="search-button" onclick="window.location.href='booking-portal.html'">SEARCH</button>
+            <button type="submit" id="search-button">SEARCH</button>
         </form>
     </section>
 
     <script src="script.js"></script>
+
+    <script>
+        // Get the user's name from localStorage and display it
+        const userName = localStorage.getItem('userName');
+        if (userName) {
+            document.getElementById('userName').innerText = userName;
+        } else {
+            document.getElementById('userName').innerText = "Guest"; // Default if no username is found
+        }
+    </script>
 </body>
 </html>
