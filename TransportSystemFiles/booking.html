@@ -5,11 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Travel Booking</title>
     <link rel="stylesheet" href="booking.css">
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
 <body>
     <section class="booking-form">
         <h1>Hello, <span id="userName"></span></h1>
-        <form id="travel-form" action="booking.php" method="POST">
+
+        <!-- Travel form -->
+        <form id="travel-form">
             <label for="start-location">Select the Starting Location</label>
             <select id="start-location" name="startLocation" required>
                 <option value="" disabled selected>Value</option>
@@ -18,7 +25,7 @@
                 <option value="MADURAI">MADURAI</option>
                 <option value="PUNE">PUNE</option>
                 <option value="BANGALORE">BANGALORE</option>
-                <option value="HYDREBAD">HYDREBAD</option>
+                <option value="HYDERABAD">HYDERABAD</option>
                 <option value="CHENNAI">CHENNAI</option>
                 <option value="KOLKATA">KOLKATA</option>
                 <option value="JAIPUR">JAIPUR</option>
@@ -34,7 +41,7 @@
                 <option value="NAGPUR">NAGPUR</option>
                 <option value="INDORE">INDORE</option>
                 <option value="CHENNAI">CHENNAI</option>
-                <option value="VIJAYWADA">VIJAYWADA</option>
+                <option value="VIJAYAWADA">VIJAYAWADA</option>
                 <option value="GOA">GOA</option>
                 <option value="BANGALORE">BANGALORE</option>
                 <option value="RANCHI">RANCHI</option>
@@ -48,25 +55,119 @@
             <label for="transport">Available Modes of Transport</label>
             <select id="transport" name="transport" required>
                 <option value="" disabled selected>Value</option>
-                <option value="PLANE">Airplane</option>
-                <option value="TRAIN">Train</option>
-                <option value="BUS">Bus</option>
+                <option value="PLANE">AIRPLANE</option>
+                <option value="TRAIN">TRAIN</option>
+                <option value="BUS">BUS</option>
+                <option value="CAB">CAB</option>
             </select>
 
             <button type="submit" id="search-button">SEARCH</button>
         </form>
-    </section>
 
-    <script src="script.js"></script>
+        <!-- Booking section -->
+        <div id="booking-section" class="hidden">
+            <br>
+            <h1>Book Your Tickets</h1>
+            <form id="booking-form">
+                <label for="num-tickets">Number of Tickets</label>
+                <input type="number" id="num-tickets" name="numTickets" value="1" required>
+
+                <label for="travel-type">Travel Type</label>
+                <input type="text" id="travel-type" name="travelType" required placeholder="Enter Travel Type">
+
+                <label for="travel-mode">Travel Mode</label>
+                <input type="text" id="travel-mode" name="travelMode" required placeholder="Enter Travel Mode">
+
+                <button type="submit">Book Now</button>
+            </form>
+        </div>
+    </section>
 
     <script>
         // Get the user's name from localStorage and display it
         const userName = localStorage.getItem('userName');
-        if (userName) {
-            document.getElementById('userName').innerText = userName;
-        } else {
-            document.getElementById('userName').innerText = "Guest"; // Default if no username is found
-        }
+        document.getElementById('userName').innerText = userName || "Guest";
+
+        // Handle form submission for travel form
+        document.getElementById('travel-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            
+            const startLocation = document.getElementById('start-location').value;
+            const destination = document.getElementById('destination').value;
+            const transport = document.getElementById('transport').value;
+
+            if (startLocation && destination && transport) {
+                fetch('booking.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: `action=validateRoute&startLocation=${startLocation}&destination=${destination}&transport=${transport}`
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.routeAvailable) {
+                        // Pre-fill travel type and mode inputs
+                        document.getElementById('travel-type').value = `${startLocation} to ${destination}`;
+                        document.getElementById('travel-mode').value = transport;
+                        
+                        // Display booking section
+                        document.getElementById('booking-section').classList.remove('hidden');
+                    } else {
+                        alert('Route not available. Please choose a different route.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while checking the route.');
+                });
+            } else {
+                alert('Please fill in all fields.');
+            }
+        });
+
+        // Handle booking form submission
+        document.getElementById('booking-form').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            // Get form values
+            const userAadhar = localStorage.getItem('userAadhar');
+            const numTickets = document.getElementById('num-tickets').value;
+            const travelType = document.getElementById('travel-type').value;
+            const travelMode = document.getElementById('travel-mode').value;
+
+            // Validate userAadhar
+            if (!userAadhar) {
+                alert("User Aadhar is not set. Please log in.");
+                return;
+            }
+
+            // Prepare data
+            const formData = new URLSearchParams();
+            formData.append("action", "bookTickets");
+            formData.append("userAadhar", userAadhar);
+            formData.append("numTickets", numTickets);
+            formData.append("travelType", travelType);
+            formData.append("travelMode", travelMode);
+
+            try {
+                const response = await fetch('handleBooking.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: formData,
+                });
+
+                const result = await response.json();
+                if (result.status === "success") {
+                    alert(`Booking successful! Total Fare: ₹${result.totalFare}`);
+                } else {
+                    alert("Error: " + (result.error || result.message));
+                }
+            } catch (error) {
+                console.error("Error submitting booking:", error);
+                alert("An unexpected error occurred.");
+            }
+        });
     </script>
 </body>
 </html>

@@ -46,10 +46,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $success = "Sign-in successful! Redirecting to the booking page...";
                     echo "<script>
                             localStorage.setItem('userName', " . json_encode($user['userName']) . ");
+                            localStorage.setItem('userAadhar', " . json_encode($userAadhar) . ");
                             window.location.href = 'booking.html';
                           </script>";
                     exit();
-                } else {
+                }
+                else {
                     $error = "Incorrect password.";
                 }
             } else {
@@ -91,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <button type="submit" class="sign-in-btn">SIGN IN</button>
         </form>
         <p><a href="#">Forgot password?</a></p>
-        <p>Don't have an account? <a href="sign-up.html">SIGN UP</a></p>
+        <p>Don't have an account? <a href="sign-up.php">SIGN UP</a></p>
     </div>
 </body>
 </html>
