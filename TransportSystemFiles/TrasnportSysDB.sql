@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS companyEmployee (
 -- Create the busRoute table
 CREATE TABLE IF NOT EXISTS busRoute (
     modeType VARCHAR(20) DEFAULT 'BUS',
-    busNo VARCHAR(10) PRIMARY KEY,
+    vehicleNo VARCHAR(10) PRIMARY KEY,
     totalCapacity INT,
     route VARCHAR(20),
     travelType ENUM('AC', 'NON-AC') NOT NULL,
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS busRoute (
 -- Create the cabRoute table
 CREATE TABLE IF NOT EXISTS cabRoute (
     modeType VARCHAR(20) DEFAULT 'CAB',
-    cabNo VARCHAR(10) PRIMARY KEY,
+    vehicleNo VARCHAR(10) PRIMARY KEY,
     carModel ENUM('MINI', 'PRIME', 'SUV') NOT NULL,
     route VARCHAR(20),
     travelDuration INT,
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS cabRoute (
 -- Create the trainRoute table
 	CREATE TABLE IF NOT EXISTS trainRoute (
 		modeType VARCHAR(20) DEFAULT 'TRAIN',
-		trainNo VARCHAR(20) PRIMARY KEY,
+		vehicleNo VARCHAR(20) PRIMARY KEY,
 		totalCapacity INT,
 		route VARCHAR(20),
 		travelMode ENUM('SLEEPER', '3 TIER', '2 TIER', '1 CLASS') NOT NULL,
@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS cabRoute (
 -- Create the planeRoute table
 CREATE TABLE IF NOT EXISTS planeRoute (
     modeType VARCHAR(20) DEFAULT 'PLANE',
-    planeNo VARCHAR(20) PRIMARY KEY,
+    vehicleNo VARCHAR(20) PRIMARY KEY,
     totalCapacity INT,
     route VARCHAR(50),
     travelMode ENUM('ECONOMY', 'FIRST CLASS', 'PRIVATE') NOT NULL,
