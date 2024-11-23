@@ -1,151 +1,124 @@
 <?php
-header('Content-Type: application/json');
+// Connect to the database
+$conn = new mysqli('localhost', 'root', '', 'TransportDB');
 
-// Database connection parameters
-$host = 'localhost';
-$dbname = 'transportdb';
-$username = 'root';
-$password = '';
+// Check connection
+if ($conn->connect_error) {
+    die(json_encode(["status" => "error", "message" => "Database connection failed: " . $conn->connect_error]));
+}
 
-try {
-    $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $action = $_POST['action'];
 
-    // Helper function to validate and sanitize inputs
-    function sanitizeInput($input) {
-        return htmlspecialchars(trim($input));
-    }
+    if ($action === 'validateRoute') {
+        // Validate the route and fetch travel types
+        $startLocation = $conn->real_escape_string($_POST['startLocation']);
+        $destination = $conn->real_escape_string($_POST['destination']);
+        $transport = $conn->real_escape_string($_POST['transport']);
+        $route = strtoupper($startLocation . '-' . $destination);
 
-    // Route validation action
-    if (isset($_POST['action']) && $_POST['action'] === 'validateRoute') {
-        $startLocation = strtoupper(sanitizeInput($_POST['startLocation'] ?? ''));
-        $destination = strtoupper(sanitizeInput($_POST['destination'] ?? ''));
-        $transport = strtoupper(sanitizeInput($_POST['transport'] ?? ''));
-
-        if (empty($startLocation) || empty($destination) || empty($transport)) {
-            echo json_encode(['routeAvailable' => false, 'error' => 'All fields are required.']);
-            exit();
-        }
-
+        // Fetch travelMode options based on transport
         $tableMapping = [
-            'PLANE' => 'planeRoute',
-            'TRAIN' => 'trainRoute',
             'BUS' => 'busRoute',
-            'CAB' => 'cabRoute'
+            'CAB' => 'cabRoute',
+            'TRAIN' => 'trainRoute',
+            'PLANE' => 'planeRoute'
         ];
 
         $tableName = $tableMapping[$transport] ?? null;
         if (!$tableName) {
-            echo json_encode(['routeAvailable' => false, 'error' => 'Invalid transport type.']);
-            exit();
+            echo json_encode(['routeAvailable' => false, 'message' => 'Invalid transport mode.']);
+            exit;
         }
 
-        $route = $startLocation . '-' . $destination;
-
-        $stmt = $conn->prepare("SELECT COUNT(*) FROM $tableName WHERE route = :route");
-        $stmt->bindParam(':route', $route, PDO::PARAM_STR);
+        $query = "SELECT DISTINCT travelMode FROM $tableName WHERE route = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("s", $route);
         $stmt->execute();
-        $routeExists = $stmt->fetchColumn();
+        $result = $stmt->get_result();
 
-        echo json_encode(['routeAvailable' => $routeExists > 0]);
-        exit();
-    }
-
-    // Ticket booking action
-    if (isset($_POST['action']) && $_POST['action'] === 'bookTickets') {
-        $userAadhar = sanitizeInput($_POST['userAadhar'] ?? '');
-        $numTickets = intval($_POST['numTickets'] ?? 1);
-        $travelType = sanitizeInput($_POST['travelType'] ?? '');
-        $travelMode = sanitizeInput($_POST['travelMode'] ?? '');
-
-        if (empty($userAadhar) || $numTickets <= 0 || empty($travelType) || empty($travelMode)) {
-            echo json_encode(['status' => 'error', 'message' => 'Invalid booking details.']);
-            exit();
+        $travelModes = [];
+        while ($row = $result->fetch_assoc()) {
+            $travelModes[] = $row['travelMode'];
         }
 
-        $routeParts = explode(' to ', $travelType);
-        if (count($routeParts) < 3) {
-            echo json_encode(['status' => 'error', 'message' => 'Invalid travel type format.']);
-            exit();
+        if (empty($travelModes)) {
+            echo json_encode(['routeAvailable' => false, 'message' => 'Route not available.']);
+        } else {
+            echo json_encode(['routeAvailable' => true, 'travelModes' => $travelModes]);
         }
 
-        $startLocation = $routeParts[0];
-        $destination = $routeParts[1];
-        $transport = strtoupper($routeParts[2]);
-        $route = $startLocation . '-' . $destination;
+        $stmt->close();
+    } elseif ($action === 'bookTickets') {
+        // Handle booking
+        $userAadhar = $conn->real_escape_string($_POST['userAadhar']);
+        $numTickets = intval($_POST['numTickets']);
+        $travelType = $conn->real_escape_string($_POST['travelType']);
+        $travelMode = $conn->real_escape_string($_POST['travelMode']);
+        $vehicleNo = $conn->real_escape_string($_POST['vehicleNo']);
 
-        $stmt = $conn->prepare("SELECT userName, userPhoneNumber FROM userDatabase WHERE userAadhar = :userAadhar");
-        $stmt->bindParam(':userAadhar', $userAadhar);
+        // Check if user exists
+        $queryUser = "SELECT userPhoneNumber FROM userDatabase WHERE userAadhar = ?";
+        $stmt = $conn->prepare($queryUser);
+        $stmt->bind_param("s", $userAadhar);
         $stmt->execute();
-        $userData = $stmt->fetch(PDO::FETCH_ASSOC);
+        $result = $stmt->get_result();
 
-        if (!$userData) {
-            echo json_encode(['status' => 'error', 'message' => 'User not found.']);
-            exit();
+        if ($result->num_rows === 0) {
+            echo json_encode(["status" => "error", "message" => "User not found."]);
+            exit;
         }
 
-        $fareMapping = [
-            'BUS' => ['table' => 'busRoute', 'columns' => ['AC' => 'fareAC', 'NON-AC' => 'fareNonAC']],
-            'CAB' => ['table' => 'cabRoute', 'columns' => ['MINI' => 'fareMini', 'PRIME' => 'farePrime', 'SUV' => 'fareSUV']],
-            'TRAIN' => ['table' => 'trainRoute', 'columns' => ['SLEEPER' => 'fareSleeper', '3 TIER' => 'fare3Tier', '2 TIER' => 'fare2Tier', '1 CLASS' => 'fare1Class']],
-            'PLANE' => ['table' => 'planeRoute', 'columns' => ['ECONOMY' => 'fareEconomy', 'FIRST CLASS' => 'fareFirstClass', 'PRIVATE' => 'farePrivate']]
+        $userPhoneNumber = $result->fetch_assoc()['userPhoneNumber'];
+        $stmt->close();
+
+        // Calculate fare
+        $tableMapping = [
+            'BUS' => 'busRoute',
+            'CAB' => 'cabRoute',
+            'TRAIN' => 'trainRoute',
+            'PLANE' => 'planeRoute'
         ];
 
-        $transportData = $fareMapping[$transport] ?? null;
-        if (!$transportData || !isset($transportData['columns'][$travelMode])) {
-            echo json_encode(['status' => 'error', 'message' => 'Invalid transport or mode.']);
-            exit();
-        }
+        $fareColumnMapping = [
+            'BUS' => $travelType === 'AC' ? 'fareAC' : 'fareNonAC',
+            'CAB' => "fare" . ucfirst($travelMode),
+            'TRAIN' => "fare" . str_replace(" ", "", $travelMode),
+            'PLANE' => "fare" . str_replace(" ", "", $travelMode)
+        ];
 
-        $tableName = $transportData['table'];
-        $fareColumn = $transportData['columns'][$travelMode];
+        $tableName = $tableMapping[$transport];
+        $fareColumn = $fareColumnMapping[$transport];
 
-        $stmt = $conn->prepare("SELECT $fareColumn AS fare FROM $tableName WHERE route = :route");
-        $stmt->bindParam(':route', $route);
+        $queryFare = "SELECT $fareColumn AS fare FROM $tableName WHERE route = ? AND travelMode = ?";
+        $stmt = $conn->prepare($queryFare);
+        $stmt->bind_param("ss", $route, $travelMode);
         $stmt->execute();
-        $routeData = $stmt->fetch(PDO::FETCH_ASSOC);
+        $fareResult = $stmt->get_result();
 
-        if (!$routeData) {
-            echo json_encode(['status' => 'error', 'message' => 'Route or fare not found.']);
+        if ($fareResult->num_rows === 0) {
+            echo json_encode(['status' => 'error', 'message' => 'Fare not found for the specified route.']);
             exit();
         }
 
-        $totalFare = $routeData['fare'] * $numTickets;
-        $vehicleNo = strtoupper(substr(md5(uniqid(rand(), true)), 0, 10));
+        $fareData = $fareResult->fetch_assoc();
+        $farePerTicket = $fareData['fare'];
+        $totalFare = $numTickets * $farePerTicket;
 
-        $stmt = $conn->prepare("
-            INSERT INTO bookingLog (
-                userAadhar, userPhoneNumber, travelMode, travelVehicle, vehicleNo, ticketsBooked, totalFare
-            ) VALUES (
-                :userAadhar, :userPhoneNumber, :travelMode, :travelVehicle, :vehicleNo, :ticketsBooked, :totalFare
-            )
-        ");
-        $stmt->execute([
-            ':userAadhar' => $userAadhar,
-            ':userPhoneNumber' => $userData['userPhoneNumber'],
-            ':travelMode' => $travelMode,
-            ':travelVehicle' => $transport,
-            ':vehicleNo' => $vehicleNo,
-            ':ticketsBooked' => $numTickets,
-            ':totalFare' => $totalFare
-        ]);
+        // Insert into bookingLog
+        $insertBooking = "INSERT INTO bookingLog (userAadhar, userPhoneNumber, travelMode, travelVehicle, vehicleNo, ticketsBooked, totalFare)
+                          VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $stmt = $conn->prepare($insertBooking);
+        $stmt->bind_param("sssssis", $userAadhar, $userPhoneNumber, $transport, $travelType, $vehicleNo, $numTickets, $totalFare);
 
-        echo json_encode([
-            'status' => 'success',
-            'message' => 'Booking successful!',
-            'totalFare' => $totalFare,
-            'vehicleNo' => $vehicleNo
-        ]);
-        exit();
+        if ($stmt->execute()) {
+            echo json_encode(["status" => "success", "message" => "Booking successful!", "totalFare" => $totalFare]);
+        } else {
+            echo json_encode(["status" => "error", "message" => "Booking failed: " . $stmt->error]);
+        }
+
+        $stmt->close();
     }
-
-} catch (PDOException $e) {
-    error_log($e->getMessage()); // Logs to server logs
-    echo json_encode([
-        'status' => 'error',
-        'message' => 'Database error occurred.',
-        'details' => $e->getMessage() // Include this for debugging
-    ]);
-    exit();
 }
+$conn->close();
 ?>

@@ -88,6 +88,38 @@
         const userName = localStorage.getItem('userName');
         document.getElementById('userName').innerText = userName || "Guest";
 
+        // Handle transport selection and fetch travel modes
+        document.getElementById('transport').addEventListener('change', function () {
+            const startLocation = document.getElementById('start-location').value;
+            const destination = document.getElementById('destination').value;
+            const transport = this.value;
+
+            if (startLocation && destination && transport) {
+                const travelModeInput = document.getElementById('travel-mode');
+                travelModeInput.value = "Loading..."; // Notify user of loading state
+
+                fetch('booking.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: `action=validateRoute&startLocation=${startLocation}&destination=${destination}&transport=${transport}`
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.routeAvailable) {
+                        travelModeInput.value = data.travelModes.join(', '); // Show available modes
+                    } else {
+                        travelModeInput.value = ""; // Clear field on error
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    travelModeInput.value = ""; // Clear field on error
+                    alert('Failed to fetch travel modes. Please try again.');
+                });
+            }
+        });
+
         // Handle form submission for travel form
         document.getElementById('travel-form').addEventListener('submit', function (event) {
             event.preventDefault();
@@ -105,11 +137,8 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.routeAvailable) {
-                        // Pre-fill travel type and mode inputs
-                        document.getElementById('travel-type').value = `${startLocation} to ${destination}`;
-                        document.getElementById('travel-mode').value = transport;
-                        
-                        // Display booking section
+                        document.getElementById('travel-type').value = "- -";
+                        document.getElementById('travel-mode').value = "- -";
                         document.getElementById('booking-section').classList.remove('hidden');
                     } else {
                         alert('Route not available. Please choose a different route.');
@@ -128,19 +157,16 @@
         document.getElementById('booking-form').addEventListener('submit', async function (event) {
             event.preventDefault();
 
-            // Get form values
             const userAadhar = localStorage.getItem('userAadhar');
             const numTickets = document.getElementById('num-tickets').value;
             const travelType = document.getElementById('travel-type').value;
             const travelMode = document.getElementById('travel-mode').value;
 
-            // Validate userAadhar
             if (!userAadhar) {
                 alert("User Aadhar is not set. Please log in.");
                 return;
             }
 
-            // Prepare data
             const formData = new URLSearchParams();
             formData.append("action", "bookTickets");
             formData.append("userAadhar", userAadhar);

@@ -3,6 +3,54 @@
 <head>
     <title>Booking Logs</title>
     <link rel="stylesheet" href="booking-logs.css"> </head>
+    <style>
+        /* Inline styles for better table presentation */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 18px;
+            text-align: center;
+        }
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+            font-family: 'Jomhuria', serif;
+            font-size: 1.4em;
+
+        }
+        table th {
+            background-color: #f4f4f4;
+            font-family: 'Jomhuria', serif;
+            font-weight: lighter;
+            text-align: center;
+            font-size: 2em;
+            background-color: #333;
+            color: #ddd;
+        }
+        table tr:nth-child(even) {
+            background-color: #404040;
+            color: #f1f1f1;
+            transition: all 0.3s ease;
+        }
+        table tr{
+            transition: all 0.3s ease;
+        }
+        table tr:hover {
+            background-color: black;
+            color:aquamarine;
+            transform: scale(1.05);
+        }
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 0px;
+            font-family: 'Jomhuria', serif;
+            font-weight: lighter;
+            font-size: 6em;
+        }
+    </style>
 <body>
     <h1>Booking Logs</h1>
 
