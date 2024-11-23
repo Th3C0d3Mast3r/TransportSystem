@@ -2,8 +2,7 @@
 
 **Travelify** is a web-based travel management system designed to make trip planning and ticket booking seamless for users. It is built using **Vanilla JavaScript**, **PHP**, and **MySQL**, delivering a lightweight and efficient user experience. 
 
-This project incorporates both **user-friendly booking features** and **admin functionalities**, ensuring smooth operations for users and administrators alike.
-
+This project incorporates both **user-friendly booking features** and **admin functionalities**, ensuring smooth operations for users and administrators alike.</br>
 ---
 
 ## Features 🚀
@@ -105,6 +104,8 @@ We welcome contributions from the community! Feel free to:
 This project is open-source and available under the [MIT License](LICENSE).
 
 ---
+
+```NOTE: The Website Is Still in Development Process and Some Changes will be made in the coming time```
 
 **Developed by [Devesh Acharya](https://github.com/deveshacharya), [Atharv Bidwai](https://github.com/AtharvBidwai) and Minor Edits in Code and Documentation by Yug Bhanushali**  
 Sophomores, Computer Science Engineering
