@@ -36,6 +36,8 @@ This project incorporates both **user-friendly booking features** and **admin fu
 
 ## Tech Stack 💻
 
+```AN UPFRONT DISCLOSURE: Do Not Try to Code such Big Websites Using PHP, when You have advanced and easy ways via JS based things!```
+
 ### Frontend:
 - **HTML**: Structure of the website.
 - **CSS**: Styling and responsive design.
